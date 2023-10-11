@@ -1,5 +1,7 @@
 import { Dispatch } from "react";
+import React, { Component } from "react";
 import "../styles/main.css";
+import TableComponent from "./TableComponent";
 
 interface REPLHistoryProps {
   // TODO: Fill with some shared state tracking all the pushed commands
@@ -18,6 +20,8 @@ export function REPLHistory(props: REPLHistoryProps) {
           {command} {index} and here is the file {props.file}
         </p>
       ))}
+      <h1>New table</h1>
+      <TableComponent data={props.file} />
     </div>
   );
 }
