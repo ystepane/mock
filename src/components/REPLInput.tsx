@@ -1,11 +1,15 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
+import { data } from "./MockData";
+import path from "path";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
   commands: string[];
   brief: boolean;
+  file: string[][];
+  setFile: Dispatch<SetStateAction<string[][]>>;
   setBrief: Dispatch<SetStateAction<boolean>>;
   setHistory: Dispatch<SetStateAction<string[]>>;
 }
@@ -19,17 +23,29 @@ export function REPLInput(props: REPLInputProps) {
   // const [mode, setMode] = useState<boolean>(true);
   // TODO WITH TA: build a handleSubmit function called in button onClick
   function handleSubmit(commandString: string) {
+    let splitInput = commandString.split(" ", 3);
     setCount(count + 1);
     let output = "";
-    switch (commandString) {
+    switch (splitInput[0]) {
       case "mode": {
         props.setBrief(!props.brief);
         output = "mode switched!!!!!!!!";
         break;
       }
-      case "load": {
-        // call the load function
-        output = "load successful!";
+      case "load_file": {
+        if (splitInput.length != 2) {
+          output = "Error: bad filepath!";
+        } else {
+          //load_file
+          // call the load function
+          // load(splitInput[1])
+          if (load(splitInput[1])) {
+            output = "load_file of " + splitInput[1] + " successful!";
+          } else {
+            output = "Could not find " + splitInput[1];
+          }
+        }
+
         break;
       }
       case "view": {
@@ -60,6 +76,15 @@ export function REPLInput(props: REPLInputProps) {
       ]);
     }
     setCommandString("");
+  }
+
+  function load(pathFile: string): boolean {
+    if (data.has(pathFile)) {
+      props.setFile(data.get(pathFile));
+      return true;
+    } else {
+      return false;
+    }
   }
   // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
   // add to it with new commands.
