@@ -8,6 +8,8 @@ interface REPLInputProps {
   commands: string[][][];
   brief: boolean;
   file: string[][];
+  search: string[][];
+  setSearch: Dispatch<SetStateAction<string[][]>>;
   setFile: Dispatch<SetStateAction<string[][]>>;
   setBrief: Dispatch<SetStateAction<boolean>>;
   setHistory: Dispatch<SetStateAction<string[][][]>>;
@@ -25,7 +27,7 @@ export function REPLInput(props: REPLInputProps) {
     let outputArray: string[][];
     let viewFlag = false;
     let searchFlag = false;
-    let searchRes: string[][] = [[]];
+    // let searchRes: string[][] = [[]];
     let splitInput = commandString.split(" ", 3);
     setCount(count + 1);
     let output = "Output: ";
@@ -67,19 +69,21 @@ export function REPLInput(props: REPLInputProps) {
         break;
       }
       case "search": {
-        if (splitInput.length != 3) {
+        if (splitInput.length !== 3) {
           output += "Error: search needs three args";
         } else {
           if (props.file[0].length !== 0) {
-            searchFlag = true;
             const searchTuple: [string, string] = [
               splitInput[1],
               splitInput[2],
             ];
-            let quickRes = searchdata.get(searchTuple);
-            if (quickRes !== undefined) {
-              searchRes = quickRes;
-            }
+            searchFlag = search(searchTuple);
+            searchFlag = true;
+
+            // let quickRes = searchdata.get(searchTuple);
+            // if (quickRes !== undefined) {
+            //   searchRes = quickRes;
+            // }
             output += "searching....... for your thing :)";
           } else {
             output += "Error: search requires a load";
@@ -105,7 +109,7 @@ export function REPLInput(props: REPLInputProps) {
       outputArray = outputArray.concat(props.file);
     }
     if (searchFlag) {
-      outputArray = outputArray.concat(searchRes);
+      outputArray = outputArray.concat(props.search);
     }
     if (props.brief) {
       props.setHistory([...props.commands, outputArray.slice(1)]);
@@ -119,6 +123,14 @@ export function REPLInput(props: REPLInputProps) {
     let file = data.get(pathFile);
     if (file !== undefined) {
       props.setFile(file);
+      return true;
+    }
+    return false;
+  }
+  function search(searchKey: [string, string]): boolean {
+    let searchResult = searchdata.get(searchKey);
+    if (searchResult !== undefined) {
+      props.setSearch(searchResult);
       return true;
     }
     return false;

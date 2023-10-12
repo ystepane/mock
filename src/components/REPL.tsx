@@ -18,6 +18,7 @@ export default function REPL() {
   // const [testing, setTesting] = useState<boolean[]>([]);
   const [brief, setBrief] = useState<boolean>(true);
   const [file, setFile] = useState<string[][]>([[]]);
+  const [search, setSearch] = useState<string[][]>([[]]);
   // string[][][]
 
   return (
@@ -31,6 +32,8 @@ export default function REPL() {
         commands={history}
         brief={brief}
         file={file}
+        search={search}
+        setSearch={setSearch}
         setFile={setFile}
         setBrief={setBrief}
         setHistory={setHistory}
