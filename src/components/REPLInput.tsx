@@ -1,17 +1,16 @@
 import "../styles/main.css";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, isValidElement, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
-import { data } from "./MockData";
-import path from "path";
+import { data, searchdata } from "./MockData";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
-  commands: string[];
+  commands: string[][][];
   brief: boolean;
   file: string[][];
   setFile: Dispatch<SetStateAction<string[][]>>;
   setBrief: Dispatch<SetStateAction<boolean>>;
-  setHistory: Dispatch<SetStateAction<string[]>>;
+  setHistory: Dispatch<SetStateAction<string[][][]>>;
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
@@ -23,57 +22,95 @@ export function REPLInput(props: REPLInputProps) {
   // const [mode, setMode] = useState<boolean>(true);
   // TODO WITH TA: build a handleSubmit function called in button onClick
   function handleSubmit(commandString: string) {
+    let outputArray: string[][];
+    let viewFlag = false;
+    let searchFlag = false;
+    let searchRes: string[][] = [[]];
     let splitInput = commandString.split(" ", 3);
     setCount(count + 1);
-    let output = "";
+    let output = "Output: ";
     switch (splitInput[0]) {
       case "mode": {
         props.setBrief(!props.brief);
-        output = "mode switched!!!!!!!!";
+        output += "mode switched!!!!!!!!";
         break;
       }
       case "load_file": {
         if (splitInput.length != 2) {
-          output = "Error: bad filepath!";
+          output += "Error: bad filepath!";
         } else {
           //load_file
           // call the load function
           // load(splitInput[1])
           if (load(splitInput[1])) {
-            output = "load_file of " + splitInput[1] + " successful!";
+            output = output + "load_file of " + splitInput[1] + " successful!";
           } else {
-            output = "Could not find " + splitInput[1];
+            output = output + "Could not find " + splitInput[1];
+          }
+        }
+        break;
+      }
+      case "view": {
+        //call view
+        if (splitInput.length != 1) {
+          output += "Error: view only takes in 1 argument. take cs32 again!";
+          // break;
+        } else {
+          if (props.file[0].length !== 0) {
+            // check if we need the index
+            viewFlag = true;
+            output += "view your thing!";
+          } else {
+            output += "Error: You Suck! AKA, no files were loaded";
+          }
+        }
+        break;
+      }
+      case "search": {
+        if (splitInput.length != 3) {
+          output += "Error: search needs three args";
+        } else {
+          if (props.file[0].length !== 0) {
+            searchFlag = true;
+            const searchTuple: [string, string] = [
+              splitInput[1],
+              splitInput[2],
+            ];
+            let quickRes = searchdata.get(searchTuple);
+            if (quickRes !== undefined) {
+              searchRes = quickRes;
+            }
+            output += "searching....... for your thing :)";
+          } else {
+            output += "Error: search requires a load";
           }
         }
 
         break;
       }
-      case "view": {
-        //call view
-        output = "view your thing!";
-        break;
-      }
-      case "search": {
-        // call search
-        output = "searching....... for your thing :)";
-        break;
-      }
       default: {
         output =
+          output +
           "Sorry, you suck. bad command.   " +
           commandString +
           " is not a real command";
         break;
       }
     }
+    let newCommand = "Command: " + commandString;
+    let newCommandTable = [newCommand.split(" ")];
+    outputArray = newCommandTable;
+    outputArray = outputArray.concat([output.split(" ")]);
+    if (viewFlag) {
+      outputArray = outputArray.concat(props.file);
+    }
+    if (searchFlag) {
+      outputArray = outputArray.concat(searchRes);
+    }
     if (props.brief) {
-      props.setHistory([...props.commands, output]);
+      props.setHistory([...props.commands, outputArray.slice(1)]);
     } else {
-      props.setHistory([
-        ...props.commands,
-        "Command: " + commandString,
-        "Output: " + output,
-      ]);
+      props.setHistory([...props.commands, outputArray]);
     }
     setCommandString("");
   }
