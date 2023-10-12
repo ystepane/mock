@@ -79,12 +79,12 @@ export function REPLInput(props: REPLInputProps) {
   }
 
   function load(pathFile: string): boolean {
-    if (data.has(pathFile)) {
-      props.setFile(data.get(pathFile));
+    let file = data.get(pathFile);
+    if (file !== undefined) {
+      props.setFile(file);
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
   // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
   // add to it with new commands.
@@ -109,7 +109,7 @@ export function REPLInput(props: REPLInputProps) {
       {/* TODO WITH TA: Build a handleSubmit function that increments count and displays the text in the button */}
       {/* TODO: Currently this button just counts up, can we make it push the contents of the input box to the history?*/}
       <button onClick={() => handleSubmit(commandString)}>
-        Submit {count}times
+        Submit {count} times
       </button>
     </div>
   );

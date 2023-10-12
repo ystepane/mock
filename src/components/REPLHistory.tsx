@@ -20,7 +20,6 @@ export function REPLHistory(props: REPLHistoryProps) {
           {command} {index} and here is the file {props.file}
         </p>
       ))}
-      <h1>New table</h1>
       <TableComponent data={props.file} />
     </div>
   );

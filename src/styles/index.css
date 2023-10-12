@@ -35,7 +35,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #251f1f;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -49,8 +49,8 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #3e1b1b;
-    background-color: #3e1b1b;
+    color: #323232;
+    background-color: #9a877b;
   }
   a:hover {
     color: #747bff;
