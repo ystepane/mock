@@ -120,5 +120,6 @@ At the moments, there are no bugs in this code.
 
 - GearUp code served as source code for this project.
 - StackOverflow and ChatGPT generated code was used to figure out some frameworks and set up details.
+- We also visited the Collab Section with Partic and Molly to figure out the testing in the basic-example.spec.ts
 
 #### Thank you for using this tool, hope it helps you find things faster and more conviniently!
