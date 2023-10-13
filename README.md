@@ -23,43 +23,21 @@ Since this project does not depend on the back-end Java code that parses and sea
 ## Program Design
 
 There are three packages: parser, searcher, and creator, and a class Main.
-This project is centered around the ParseCSV class. In the creator package,
-there is an Exception subclass, `FactoryFailureException`, to be thrown
-by the Creator, Creator class that implements the method, and the `CreatorFromRow` interface that
-was given.
+This project is centered around the ParseCSV class. The project uses React as a framework for creating reusable components and managing state. The main components are:
 
-Creator works by passing the `Creator` object, which implements the `CreatorFromRow`
-interface, to ParseCSV. The parser works with user-defined type objects T to transform it to the
-format needed to search in it. After doing that, SearchCSV receives the parsed ArrayList of data and
-depending on the data provided.
+• `App`: The root component that renders the whole app.
 
-## Design Choices
+• `REPLHistory`: The component that displays the history of commands and results in a scrollable area.
 
-Here is a possible way to rewrite this for an md readme:
+• `CommandPrompt`: The component that handles user input and displays a prompt symbol.
 
-### Handlers and Server
+• `output`: The component that renders different types of output depending on the command (e.g., text, table, error).
 
-This project consists of four handler classes and one server class that work together to provide a
-web API for data retrieval and search. The handler classes implement the `Route` interface from the
-SparkJava framework, which allows them to process different types of GET requests and return JSON
-responses. The server class uses the SparkJava framework to set up the endpoints for each handler
-and route the incoming requests to the appropriate handler. The following sections describe the
-functionality and design choices of each class.
+• `mode`: The component that allows switching between 'brief' and 'verbose' output modes.
 
-### LoadHandler
+The project uses TypeScript as a superset of JavaScript that adds static type checking and other features. TypeScript helps to catch errors at compile time and improve code quality. The project follows strict type checking rules and avoids type casting.
 
-The `LoadHandler` class handles GET requests related to loading CSV files from a given file path. It
-expects a filepath query parameter that specifies the path to the CSV file to be loaded. It uses the
-`ParserCSV` class from the CSV sprint to parse the file and store it in memory as a list of lists of
-strings. It also uses the `CreatorFromRow` interface and a custom `Creator` class to specify how
-each
-row from the CSV file is transformed into a list of strings.
-
-The `LoadHandler` class updates the dataset in the Storage object, which is a singleton class that
-stores the data loaded from CSV files. If an error occurs during loading, such as an invalid file
-path or a parsing exception, it generates a JSON response indicating the failure and the reason. The
-`LoadHandler` class also validates the file path and checks if there is already a CSV file loaded
-before loading a new one.
+The project uses CSS to style the components and create a command-prompt interface that resembles a terminal. The project uses CSS variables to define colors and fonts, and CSS grid to layout the components.
 
 ### ViewHandler
 
