@@ -2,13 +2,11 @@
 
 # Mock-bkaravan-ystepane
 
-add note about style issues on different devices.
-
 This is the Mock Project for Sprint 3. CS32 at Brown University.
 
 ### _Completed by Julia Stepanenko (ystepane) and Bohdan Karavan (bkaravan)._
 
-The project took about _*16 hours*_ to complete. \
+The project took about _*20 hours*_ to complete. \
 \
 Github https://github.com/cs0320-f23/mock-bkaravan-ystepane!
 
@@ -31,15 +29,19 @@ The project uses React as a framework for creating reusable components and manag
 
 • `CommandPrompt`: The component that handles user input and displays a prompt symbol.
 
-• `output`: The component that renders different types of output depending on the command (e.g., text, table, error).
+• `commands`: The component that keeps track different types of output depending on the command (e.g., text, table, error), stores it, and gets mapped onto the website.
 
 • `mode`: The component that allows switching between 'brief' and 'verbose' output modes.
 
 - Program starts with in brief mode
 - when `mode` is inputted, the mode switches
 - old output does not change when the `mode` is switched
-  •
-  • `view`: a component that allows to
+
+• `view`: a command that allows to view the current loaded file
+
+• `load_file`: a command that allows to load a file from the backend to the webpage
+
+• `search`: a command that allows to search for a specific row withing the loaded file
 
 The project uses TypeScript as a superset of JavaScript that adds static type checking and other features. TypeScript helps to catch errors at compile time and improve code quality. The project follows strict type checking rules and avoids type casting.
 
@@ -51,9 +53,9 @@ In order to keep track of history and make it scrollable, a function makes a new
 
 - when the input button is clicked, history appears with the appropriate message.
 
-`input`
+`commandString`
 
-- when the user keypresses, the string appears in the Input value
+- when the user keypresses, the string appears in the commandtring value
 - after the user clicks submit, the Input value is reset to an empty string
 
 `Response messages`
