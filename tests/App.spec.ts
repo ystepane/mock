@@ -364,7 +364,7 @@ test("valid search with view and load", async ({ page }) => {
   ).toBeVisible();
 });
 // search with load
-test("valid search with load", async ({ page }) => {
+test("valid index search with load", async ({ page }) => {
   //load
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("load_file way");
@@ -477,9 +477,9 @@ test("valid search with load verbose", async ({ page }) => {
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("load_file ex2");
   await page.getByRole("button", { name: "Submitted 1 times" }).click();
-  // await expect(
-  //   page.locator("tr").filter({ hasText: "Command:load_fileex2" })
-  // ).toBeVisible();
+  await expect(
+    page.locator("tr").filter({ hasText: "Command: load_fileex2" })
+  ).toBeVisible();
   await expect(
     page.locator("tr").filter({ hasText: "Output:load_fileofex2successful!" })
   ).toBeVisible();
@@ -505,18 +505,91 @@ test("brief to verbose to brief", async ({ page }) => {
   await page.getByLabel("Command input").fill("mode");
   await page.getByRole("button", { name: "Submitted 1 times" }).click();
   await expect(
-    page.locator("table").filter({ hasText: "Command:mode" })
+    page.locator("tr").filter({ hasText: "Command: mode" })
   ).toBeVisible();
   await expect(
     page.locator("tr").filter({ hasText: "Output:modeswitchedtobrief" })
   ).toBeVisible();
   // search
   await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("load_file empty");
+  await page.getByLabel("Command input").fill("load_file stars");
   await page.getByRole("button", { name: "Submitted 2 times" }).click();
   await expect(
     page
       .locator("table")
-      .filter({ hasText: "Output:load_fileofemptysuccessful!" })
+      .filter({ hasText: "Output:load_fileofstarssuccessful!" })
   ).toBeVisible();
+});
+
+test("view with an empty load", async ({ page }) => {
+  // mode
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:modeswitchedtoverbose" })
+  ).toBeVisible();
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file empty");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("tr").filter({ hasText: "Command: load_fileempty" })
+  ).toBeVisible();
+  await expect(
+    page.locator("tr").filter({ hasText: "Output:load_fileofemptysuccessful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Error:nofileswereloaded" })
+  ).toBeVisible();
+});
+
+test("view with one column shape", async ({ page }) => {
+  // mode
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:modeswitchedtoverbose" })
+  ).toBeVisible();
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file col");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("tr").filter({ hasText: "Command: load_filecol" })
+  ).toBeVisible();
+  await expect(
+    page.locator("tr").filter({ hasText: "Output:load_fileofcolsuccessful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Successfulview!" })
+  ).toBeVisible();
+  await expect(page.locator("tr").filter({ hasText: "1" })).toBeVisible();
+  await expect(page.locator("tr").filter({ hasText: "2" })).toBeVisible();
+});
+
+test("valid name search with load", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file stars");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofstarssuccessful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search ProperName Sol");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(page.locator("tr").filter({ hasText: "0Sol000" })).toBeVisible();
 });
