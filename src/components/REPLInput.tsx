@@ -27,8 +27,8 @@ export function REPLInput(props: REPLInputProps) {
     let outputArray: string[][];
     let viewFlag = false;
     let searchFlag = false;
-    // let searchRes: string[][] = [[]];
-    let splitInput = commandString.split(" ", 3);
+    let searchRes: string[][] = [[]];
+    let splitInput = commandString.split(" ");
     setCount(count + 1);
     let output = "Output: ";
     switch (splitInput[0]) {
@@ -77,9 +77,11 @@ export function REPLInput(props: REPLInputProps) {
               splitInput[1],
               splitInput[2],
             ];
-            searchFlag = search(searchTuple);
+            let quickRes = search(searchTuple);
+            if (quickRes !== undefined) {
+              searchRes = quickRes;
+            }
             searchFlag = true;
-
             // let quickRes = searchdata.get(searchTuple);
             // if (quickRes !== undefined) {
             //   searchRes = quickRes;
@@ -89,7 +91,6 @@ export function REPLInput(props: REPLInputProps) {
             output += "Error: search requires a load";
           }
         }
-
         break;
       }
       default: {
@@ -109,7 +110,7 @@ export function REPLInput(props: REPLInputProps) {
       outputArray = outputArray.concat(props.file);
     }
     if (searchFlag) {
-      outputArray = outputArray.concat(props.search);
+      outputArray = outputArray.concat(searchRes);
     }
     if (props.brief) {
       props.setHistory([...props.commands, outputArray.slice(1)]);
@@ -127,13 +128,8 @@ export function REPLInput(props: REPLInputProps) {
     }
     return false;
   }
-  function search(searchKey: [string, string]): boolean {
-    let searchResult = searchdata.get(searchKey);
-    if (searchResult !== undefined) {
-      props.setSearch(searchResult);
-      return true;
-    }
-    return false;
+  function search(searchKey: [string, string]): string[][] | undefined{
+    return searchdata.get(searchKey);
   }
   // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
   // add to it with new commands.
