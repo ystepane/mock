@@ -1,4 +1,4 @@
-# _MOCK_
+# MOCK
 
 # Mock-bkaravan-ystepane
 
@@ -6,11 +6,11 @@ add note about style issues on different devices.
 
 This is the Mock Project for Sprint 3. CS32 at Brown University.
 
-### **Completed by Julia Stepanenko (ystepane) and Bohdan Karavan (bkaravan).**
+### _Completed by Julia Stepanenko (ystepane) and Bohdan Karavan (bkaravan)._
 
-The project took about **_16 hours_** to complete. \
+The project took about _*16 hours*_ to complete. \
 \
-Github [repo link](https://github.com/cs0320-f23/mock-bkaravan-ystepane)!
+Github https://github.com/cs0320-f23/mock-bkaravan-ystepane!
 
 ## About
 
@@ -22,8 +22,8 @@ Since this project does not depend on the back-end Java code that parses and sea
 
 ## Program Design
 
-There are three packages: parser, searcher, and creator, and a class Main.
-This project is centered around the ParseCSV class. The project uses React as a framework for creating reusable components and managing state. The main components are:
+There are four commands that can be used: `mode`, `load_file`, `view`, `search`.
+The project uses React as a framework for creating reusable components and managing state. The main components are:
 
 • `App`: The root component that renders the whole app.
 
@@ -35,81 +35,36 @@ This project is centered around the ParseCSV class. The project uses React as a 
 
 • `mode`: The component that allows switching between 'brief' and 'verbose' output modes.
 
+- Program starts with in brief mode
+- when `mode` is inputted, the mode switches
+- old output does not change when the `mode` is switched
+  •
+  • `view`: a component that allows to
+
 The project uses TypeScript as a superset of JavaScript that adds static type checking and other features. TypeScript helps to catch errors at compile time and improve code quality. The project follows strict type checking rules and avoids type casting.
 
 The project uses CSS to style the components and create a command-prompt interface that resembles a terminal. The project uses CSS variables to define colors and fonts, and CSS grid to layout the components.
 
-### ViewHandler
+`History`
 
-The `ViewHandler` class handles GET requests for viewing the contents of a loaded CSV file in a JSON
-format. It takes in a Dataset object as a parameter, which contains the data loaded from CSV files.
+In order to keep track of history and make it scrollable, a function makes a new html table element with the given text for every entry.
 
-The ViewHandler class also checks if the dataset is empty before returning a response. If the
-dataset is empty, it means that no CSV file has been loaded yet, and it returns an error response
-indicating that no files are loaded.
+- when the input button is clicked, history appears with the appropriate message.
 
-### SearchHandler
+`input`
 
-The `SearchHandler` class handles GET requests for searching the loaded CSV data by a query string.
-It
-takes in a Storage object as a parameter, which contains the data loaded from CSV files. It also
-takes in query parameters for the search, such as name of the column or the index, columnHeader,
-value, operator, and
-subqueries.
+- when the user keypresses, the string appears in the Input value
+- after the user clicks submit, the Input value is reset to an empty string
 
-The `SearchHandler` class also checks if the dataset is empty or if the query parameters are invalid
-before returning a response. If either of these conditions is true, it returns an error response
-indicating the problem.
+`Response messages`
 
-### BroadbandHandler
+- After entering load_file <file path>, loadedCSV is updated to match the contents of the file path
 
-The `BroadbandHandler` class handles GET requests for retrieving broadband data for a given state
-and
-county name. It takes in query parameters for the state name and county name, such as state and
-county.
+- Success message is printed.
 
-The `BroadbandHandler` class uses `HttpClient` to make API calls to the Census API using state codes
-and
-county codes. It converts state names and county names into codes using summary files from the 2010
-decennial census. It retrieves broadband data using variables from the American Community Survey (
-ACS) 1-Year API.
+- When the file path is not valid, an appropriate error message is printed.
 
-The `BroadbandHandler` class returns a JSON object that contains fields for date and time, state
-name,
-county name, and broadband percentage as a response. The date and time indicate when the data was
-retrieved from the Census API by the server. The state name and county name are repeated back from
-the request parameters. The broadband percentage is calculated from the ACS variables.
-
-The `BroadbandHandler` class also checks if the request parameters are valid or if there is any
-error
-in accessing or parsing the Census API data before returning a response. If either of these
-conditions is true, it returns an error response indicating the problem.
-
-### Main
-
-`Main` (sever)
-The `Server` class acts as the central component that listens for incoming HTTP requests, routes
-them
-to the appropriate handler, and sends back
-the corresponding responses using the SparkJava framework. It sets up four endpoints for each
-handler: `loadcsv`, `viewcsv`, `searchcsv`, and `broadband`. It creates instances of each handler
-class and
-passes them to SparkJava's get method along with their respective endpoints.
-
-The Server class also creates an instance of Dataset, which is a singleton class that stores data
-loaded from CSV files. It passes this instance to `LoadHandler`, `ViewHandler`, and `SearchHandler`
-as
-parameters so that they can access or update
-the dataset accordingly.
-
-### A note about CheckStyle errors
-
-There are some CheckStyle errors in this project due to the use of "CSV" in the names of certain
-classes, since there can be no more than 1 consecutive capital letter. Unfortunately, this is
-unavoidable as this must be fully capitalized.
-Some errors may be related to indentation, line length, or naming conventions that are not
-consistent with Java best practices.
-These errors are not critical and can be ignored or suppressed.
+- When an incorrect number of arguments is provided for any command, an appropriate error message is printed.
 
 ## Testing Suites `MockData`
 
@@ -119,54 +74,30 @@ The project uses Playwright to write automated tests for the behavior of the fro
 
 The tests use mocked data and results to verify that the app displays the correct output for each command.
 
+To mock loading functionality, we used a dictionary that maps “file paths” to the corresponding mock CSV data. This allows us to quickly retrieve CSV data when needed, as if it was being loaded from a file path.
+
 ## Using the Project
 
-All requests are GET requests that use only query parameters rather than structured JSON requests.
-This makes testing from the browser easier, since you can enter the parameters as part of the URL.
-The following endpoints are supported:
-`loadcsv`, `viewcsv`, `searchcsv`, `broadband`.
+Initially, the webpage is loaded and it awawits a command to be inputted.
+To do this, press `npm start` and go to `localhost:8000`.
+This makes testing from the browser easier, since the parameters can be entered directly there.
+Here are the examples of how to use the page:
 
-You can access query parameters via the request.queryParams method call in the handler's handle
-method.
+`Mode`:
+To switch the mode, enter `mode` with no other arguments and await for the message confirming the mode you switched to.
 
-### LoadHandler
+`Load`:
+To load a file, enter `load_file <filepath>` and await for a message to be printed. If your file is valid, it will be loaded, if not -- you will get an error message. Only 2 arguments are allowed here.
 
-`loadcsv`: This endpoint allows the user to load, view, or search the contents of a CSV file by
-providing the path of the CSV file to load (on the backend).
-At most one CSV dataset is loaded at
-any time, and using `viewcsv` or `searchcsv` without a CSV loaded produces an error response. The
-requirements for search include the ability to search by column index, the ability to search by
-column header, as well as the ability to search across all columns. Incoming requests may use the
-nested and/or/not boolean query pattern from queries in the CSV sprint.
+`View`:
+To view the file, a valid file needs to be loaded. Enter `view` with no other arguments. The file you loaded will be printed or the error appropriate message will be displayed.
 
-### ViewHandler
-
-`viewcsv`: This endpoint allows the user to view the contents of a loaded CSV file in a JSON format.
-
-### SearchHandler
-
-`searchcsv`: This endpoint allows the user to search the contents of a loaded CSV file by providing
-a query string in a JSON format. The query string can specify which column(s) to search, what value(
-s) to look for, and how to combine multiple conditions (using and/or/not operators).
-This endpoint allows you to search the contents of a loaded CSV file by providing a
-query string in a JSON format. The query string can specify which column(s) to search, what value(s)
-to look for, and how to combine multiple conditions (using and, or, not operators). The query
-parameter query is required and must contain a valid JSON string. A CSV file must be loaded before
-using this endpoint.
-
-### BroadBandHandler
-
-`broadband`: This endpoint allows the user to retrieve the percentage of households with broadband
-access for a target location by providing the name of the target state and county in the request.
-The response includes the date and time that all data was retrieved from the ACS API by the server,
-as well as the state and county names received.
-: This endpoint allows you to retrieve the percentage of households with broadband access
-for a target location by providing the name of the target state and county in your request. The
-query parameters state and county are required and must contain valid state and county names.
+`Search`:
+To search in the file, a valid file needs to be loaded. Enter `search <column/index> <keyword>`. Only 3 arguments are allowed. The search result will be displayed or an appropriate error will be printed.
 
 ### Building tests
 
-## _Running_ the project and tests
+## Running the project and tests
 
 ### Server failure responses
 
@@ -196,11 +127,9 @@ Census API returned an error for a given location).
 To run this program, run the `Main` class and navigate to the server URL in the Terminal.
 Make sure `Main` successfully ran and proceed to this address:
 
-```
 Server started at http://localhost:3232
-```
 
-**Load, View, and Search**
+_Load, View, and Search_
 
 In your browser URL, start making API requests to load, view, or search the contents
 of a CSV file by calling the `loadcsv`, `viewcsv`, or `searchcsv` endpoints.
@@ -211,9 +140,7 @@ following:
 look like
 this:
 
-```
 http://localhost:3232/loadCSV?filepath=data/stars/ten-star.csv.
-```
 
 At most one CSV file can be loaded at any time.
 Using `viewcsv` or `searchcsv` CSV queries without a CSV loaded produces an error API response.
@@ -221,9 +148,7 @@ Using `viewcsv` or `searchcsv` CSV queries without a CSV loaded produces an erro
 Once you have loaded a CSV file, use the `viewcsv` query to view the entire CSV file's contents as a
 JSON:
 
-```
 http://localhost:3232/viewCSV
-```
 
 The `searchCSV` API query takes several parameters that you must provide: `search`, `argument`.
 
@@ -238,9 +163,7 @@ However, if you run it with just the search word as the only input, the search w
 using the whole file and will still succeed.
 For example, with the ten-star.csv file loaded, try
 
-```
 /searchcsv?search=Sol&I:2&y
-```
 
 This will send back rows matching the given search criteria.
 
