@@ -3,7 +3,10 @@ import { Dispatch, SetStateAction, isValidElement, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { data, searchdata } from "./MockData";
 /**
- * This component
+ * This component is responsible for managing the input from the page, as well as processing the avaialbe commands.
+ */
+/**
+ * This interface includes the props used below.
  */
 export interface REPLInputProps {
   commands: string[][][];
@@ -12,11 +15,17 @@ export interface REPLInputProps {
   setHistory: Dispatch<SetStateAction<string[][][]>>;
 }
 
+/**
+ * This function sets the needed const to useState.
+ */
 export function REPLInput(props: REPLInputProps) {
   const [commandString, setCommandString] = useState<string>("");
   const [count, setCount] = useState(Number);
   const [mode, setMode] = useState<boolean>(true);
-
+  /**
+   * This function handles the submission entered by the user.
+   * There is a switch case that works with a splitted input and processes the commands.
+   */
   function handleSubmit(commandString: string) {
     setCount(count + 1);
     let viewFlag = false;
@@ -100,7 +109,9 @@ export function REPLInput(props: REPLInputProps) {
     </div>
   );
 }
-
+/**
+ * This function works on checking if the loaded file is valid and sets the data to be that file if it is.
+ */
 export function handleLoad(pathFile: string, props: REPLInputProps): boolean {
   let file = data.get(pathFile);
   if (file !== undefined) {
@@ -109,7 +120,10 @@ export function handleLoad(pathFile: string, props: REPLInputProps): boolean {
   }
   return false;
 }
-
+/**
+ * This function works with switching the mode and does it, as well as returns the output
+ * stating which mode the user swithed to.
+ */
 export function handleMode(state: boolean): string {
   let output = "Mode switched to ";
   if (state) {
@@ -119,7 +133,10 @@ export function handleMode(state: boolean): string {
   }
   return output;
 }
-
+/**
+ * This function handles search and checks if the keyword is valid,
+ * as well as outputs the result of search or the error message.
+ */
 export function handleSearch(arg1: string, arg2: string): string[][] {
   let result = searchdata.get(arg1 + arg2);
   if (result !== undefined) {
@@ -130,7 +147,9 @@ export function handleSearch(arg1: string, arg2: string): string[][] {
     ["Args", arg1, arg2],
   ];
 }
-
+/**
+ * This function consolidates the output and works on printing out the results to the history.
+ */
 export function handleOutput(
   props: REPLInputProps,
   mode: boolean,
