@@ -39,13 +39,18 @@ test("after I type into the input box, its text changes", async ({ page }) => {
   const mock_input = `Awesome command`;
   await expect(page.getByLabel("Command input")).toHaveValue(mock_input);
 });
-
+/**
+ * This test checks that the button is visible.
+ */
 test("on page load, i see a button", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "Submitted 0 times" })
   ).toBeVisible();
 });
-
+/**
+ * This test checks that the button changes the
+ * times it has been submitted based on the clicks.
+ */
 test("after I click the button, its label increments", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "Submitted 0 times" })
@@ -59,6 +64,9 @@ test("after I click the button, its label increments", async ({ page }) => {
   ).toBeVisible();
 });
 
+/**
+ * This test checks that the "Mock" title is visible and is on the page.
+ */
 test("has title", async ({ page }) => {
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Mock/);
