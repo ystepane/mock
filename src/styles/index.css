@@ -47,6 +47,11 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.centered-table {
+  margin: 0 auto; /* This centers the table horizontally */
+  /* You can add more styles as needed */
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #323232;

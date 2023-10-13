@@ -6,7 +6,7 @@ interface Props {
 
 const TableComponent: React.FC<Props> = ({ data }) => {
   return (
-    <table>
+    <table className="centered-table">
       <tbody>
         {data.map((row, rowIndex) => (
           <tr key={rowIndex}>
