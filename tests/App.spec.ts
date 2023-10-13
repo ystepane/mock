@@ -402,11 +402,13 @@ test("failed bad search with load", async ({ page }) => {
   await page.getByLabel("Command input").fill("search bad input");
   await page.getByRole("button", { name: "Submitted 1 times" }).click();
   await expect(
-    page.locator("table").filter({ hasText: "Output:Searching!" })
+    page.locator("table").filter({
+      hasText: "Output:Searching!:)",
+    })
   ).toBeVisible();
   await expect(
-    page.locator("table").filter({
-      hasText: "Error:searchfailed.Keywordnotfound.",
+    page.locator("tr").filter({
+      hasText: "Argsbadinput",
     })
   ).toBeVisible();
 });
