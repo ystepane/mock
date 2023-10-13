@@ -95,76 +95,31 @@ To view the file, a valid file needs to be loaded. Enter `view` with no other ar
 `Search`:
 To search in the file, a valid file needs to be loaded. Enter `search <column/index> <keyword>`. Only 3 arguments are allowed. The search result will be displayed or an appropriate error will be printed.
 
-### Building tests
+## Building tests
 
-## Running the project and tests
+Appropriate Playwright tests for the behavior of the front end web app were written.
 
-### Server failure responses
+Different shapes of command and result were tested.
+From different reachable states, tests were performed.
 
-All responses are serialized as JSON strings. To keep the format simple, all responses are
-serializations of a Map<String, Object> object. For all replies, the map contains a result field
-with value success in case of success or an error code in case of an error. The following error
-codes are used:
+To run the tests, we used the GearUp guide and worked with Playwright.
+To build and run a test, input `npx playwright test` which runs tests headless (does not open the browser) in the background. You can also use `npx playwright show-report` which gives more detailed information on test progression.
 
-• `error_bad_json`: The request was ill-formed or contained invalid JSON.
+`npx playwright test --ui` opens a UI to explore what the web app looks like as the test is occurring.
 
-• `error_bad_request`: The request was missing a required field or contained an invalid value for a
-field.
+## Some usage notes:
 
-• `error_datasource`: The given data source was not accessible (e.g., the file did not exist or the
-Census API returned an error for a given location).
+- The webpage might look different on different devices (colors may differ, fonts, etc)
+- For this project, the user can only load the data that has already been predetermined since we are using exclusively mock data.
 
-#### Some usage notes:
+## Bugs
 
-- If the file is in the project folder, you can use the relative filepath (i.e. starting from the
-  current directory).
-- Otherwise, you can use the absolute filepath (i.e. starting from your root directory).
+At the moments, there are no bugs in this code.
 
-### Running Server
+## Sources / Credits
 
-#### As a DEVELOPER
-
-To run this program, run the `Main` class and navigate to the server URL in the Terminal.
-Make sure `Main` successfully ran and proceed to this address:
-
-Server started at http://localhost:3232
-
-_Load, View, and Search_
-
-In your browser URL, start making API requests to load, view, or search the contents
-of a CSV file by calling the `loadcsv`, `viewcsv`, or `searchcsv` endpoints.
-
-The `loadcsv` API query for CSV data takes a file path. After the `loadcsv` endpoint, input the
-following:
-`?filepath=<your_file_path>`. For example, to load the test.csv file in this program, the URL would
-look like
-this:
-
-http://localhost:3232/loadCSV?filepath=data/stars/ten-star.csv.
-
-At most one CSV file can be loaded at any time.
-Using `viewcsv` or `searchcsv` CSV queries without a CSV loaded produces an error API response.
-
-Once you have loaded a CSV file, use the `viewcsv` query to view the entire CSV file's contents as a
-JSON:
-
-http://localhost:3232/viewCSV
-
-The `searchCSV` API query takes several parameters that you must provide: `search`, `argument`.
-
-There are optional variables: if the user knows more information about what they are looking for,
-they should specify whether they have available information about whether there is a header `(y/n)`,
-whether they know something more about the column name `(N:)` or it's index `(I:)` and what exactly
-is known
-(column name or the index number). After providing the information, the user should run the Main
-class
-and receive the output -- the search result.
-However, if you run it with just the search word as the only input, the search will be performed
-using the whole file and will still succeed.
-For example, with the ten-star.csv file loaded, try
-
-/searchcsv?search=Sol&I:2&y
-
-This will send back rows matching the given search criteria.
+- GearUp code served as source code for this project.
+- StackOverflow and ChatGPT generated code was used to figure out some frameworks and set up details.
+- We also visited the Collab Section with Partic and Molly to figure out the testing in the basic-example.spec.ts
 
 #### Thank you for using this tool, hope it helps you find things faster and more conviniently!
