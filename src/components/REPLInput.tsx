@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, isValidElement, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { data, searchdata } from "./MockData";
 
-interface REPLInputProps {
+export interface REPLInputProps {
   commands: string[][][];
   file: string[][];
   setFile: Dispatch<SetStateAction<string[][]>>;
@@ -92,7 +92,7 @@ export function REPLInput(props: REPLInputProps) {
         />
       </fieldset>
       <button onClick={() => handleSubmit(commandString)}>
-        Submit {count} times
+        Submitted {count} times
       </button>
     </div>
   );

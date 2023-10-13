@@ -43,13 +43,67 @@ test("after I type into the input box, its text changes", async ({ page }) => {
 
 test("on page load, i see a button", async ({ page }) => {
   await page.goto("http://localhost:8000/");
-  await expect(page.getByLabel("Button")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Submitted 0 times" })
+  ).toBeVisible();
 });
 
 test("after I click the button, its label increments", async ({ page }) => {
-  // TODO WITH TA: Fill this in to test your button counter functionality!
+  await page.goto("http://localhost:8000/");
+  await expect(
+    page.getByRole("button", { name: "Submitted 0 times" })
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await page.getByRole("button", { name: "Submitted 3 times" }).click();
+  await expect(
+    page.getByRole("button", { name: "Submitted 4 times" })
+  ).toBeVisible();
 });
 
-test("after I click the button, my command gets pushed", async ({ page }) => {
-  // TODO: Fill this in to test your button push functionality!
+test("has title", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Mock/);
+});
+
+test("supports empty submit", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:Error:badcommand.isnotarealcommand" })
+  ).toBeVisible();
+});
+//  <table class="centered-table">…</table> aka getByRole('table').first()
+//    <table class="centered-table">…</table> aka locator('table').filter({ hasText: 'Output:Error:badcommand.isnotarealcommand' })
+test("supports mode switching", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Modeswitchedtoverbose" })
+  ).toBeVisible();
+});
+
+test("supports multiple submits", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+  //first submit
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Modeswitchedtoverbose" })
+  ).toBeVisible();
+  // second submit
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Modeswitchedtobrief" })
+  ).toBeVisible();
 });
