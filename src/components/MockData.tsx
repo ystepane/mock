@@ -1,3 +1,8 @@
+/**
+ * This is the Mock Dataset.
+ * There are examples for load, search, and view that can be loaded into the program.
+ */
+
 const CSVEx1v = [
   ["1", "2", "3", "4", "5"],
   ["I", "want", "it", "that", "way"],
@@ -16,6 +21,10 @@ const CSVEx3 = [
   ["Joe", "MetCalf", "330"],
   ["Carla", "Barus", "32"],
 ];
+
+const emptyCSV = [[]];
+
+const CSVcol = [["1"], ["2"], ["3"]];
 
 const starCSV = [
   ["StarID", "ProperName", "X", "Y", "Z"],
@@ -87,6 +96,8 @@ data.set("ex2", CSVEx2);
 data.set("noheader", CSVEx3);
 data.set("stars", starCSV);
 data.set("earnings", earningCSV);
+data.set("empty", emptyCSV);
+data.set("col", CSVcol);
 
 export let searchdata = new Map<string, string[][]>(); //tuples didn't work
 searchdata.set("1want", search1);

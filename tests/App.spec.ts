@@ -75,7 +75,6 @@ test("supports empty submit", async ({ page }) => {
 //  <table class="centered-table">…</table> aka getByRole('table').first()
 //    <table class="centered-table">…</table> aka locator('table').filter({ hasText: 'Output:Error:badcommand.isnotarealcommand' })
 test("supports mode switching", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("mode");
   await page.getByRole("button", { name: "Submitted 0 times" }).click();
@@ -85,7 +84,6 @@ test("supports mode switching", async ({ page }) => {
 });
 
 test("multiple submits", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   //first submit
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("mode");
@@ -464,5 +462,61 @@ test("failed invalid command", async ({ page }) => {
     page.locator("table").filter({
       hasText: "Output:Error:badcommand.badcommandisnotarealcommand",
     })
+  ).toBeVisible();
+});
+
+test("valid search with load verbose", async ({ page }) => {
+  // mode
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:modeswitchedtoverbose" })
+  ).toBeVisible();
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file ex2");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  // await expect(
+  //   page.locator("tr").filter({ hasText: "Command:load_fileex2" })
+  // ).toBeVisible();
+  await expect(
+    page.locator("tr").filter({ hasText: "Output:load_fileofex2successful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search 1 second");
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await expect(
+    page.locator("tr").filter({ hasText: "jakesecondright" })
+  ).toBeVisible();
+});
+
+test("brief to verbose to brief", async ({ page }) => {
+  // mode
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:modeswitchedtoverbose" })
+  ).toBeVisible();
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Command:mode" })
+  ).toBeVisible();
+  await expect(
+    page.locator("tr").filter({ hasText: "Output:modeswitchedtobrief" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file empty");
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofemptysuccessful!" })
   ).toBeVisible();
 });

@@ -2,6 +2,9 @@ import { useState } from "react";
 import "../styles/main.css";
 import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
+/**
+ * This is the main REPL class. It binds history and the REPLInput together.
+ */
 
 export default function REPL() {
   const [history, setHistory] = useState<string[][][]>([[[]]]); // history that records everything as a table

@@ -2,7 +2,9 @@ import "../styles/main.css";
 import { Dispatch, SetStateAction, isValidElement, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { data, searchdata } from "./MockData";
-
+/**
+ * This component
+ */
 export interface REPLInputProps {
   commands: string[][][];
   file: string[][];
