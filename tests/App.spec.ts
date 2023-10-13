@@ -215,11 +215,252 @@ test("failing view with bad load", async ({ page }) => {
   ).toBeVisible();
 });
 // view with >1 arg
+test("failing view with many args", async ({ page }) => {
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file badfile");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Couldnotfindbadfile" })
+  ).toBeVisible(); //first submit
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view file");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("table").filter({
+      hasText: "Output:Error:viewonlytakesin1argument.Takecs32again!",
+    })
+  ).toBeVisible();
+});
 // view with two good loads & view twice diff things
+test("good view twice", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file way");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofwaysuccessful!" })
+  ).toBeVisible();
+  //view
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:Successfulview!12345Iwantitthatway" })
+  ).toBeVisible();
+  // await expect(
+  //   page.locator("table").filter({ hasText: "12345" })
+  // ).toBeVisible();
+  // await expect(
+  //   page.locator("table").filter({ hasText: "Iwantitthatway" })
+  // ).toBeVisible();
+  // second view
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file noheader");
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofnoheadersuccessful!" })
+  ).toBeVisible();
+  //view
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByRole("button", { name: "Submitted 3 times" }).click();
+  await expect(
+    page.locator("table").filter({
+      hasText: "Output:Successfulview!KevinCIT32JoeMetCalf330CarlaBarus32",
+    })
+  ).toBeVisible();
+  // await expect(
+  //   page.locator("table").filter({ hasText: "KevinCIT23" })
+  // ).toBeVisible();
+  // await expect(
+  //   page.locator("table").filter({ hasText: "JoeMetCalf330" })
+  // ).toBeVisible();
+  // await expect(
+  //   page.locator("table").filter({ hasText: "CarlaBarus32" })
+  // ).toBeVisible();
+});
 // view with a bad and a good load
+test("view with bad and good load", async ({ page }) => {
+  //first submit
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file badfile");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Couldnotfindbadfile" })
+  ).toBeVisible();
+  // second load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file noheader");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofnoheadersuccessful!" })
+  ).toBeVisible();
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await expect(
+    page.locator("table").filter({
+      hasText: "Output:Successfulview!KevinCIT32JoeMetCalf330CarlaBarus32",
+    })
+  ).toBeVisible();
+});
+
 // search without load
+test("fails search without load & bad input", async ({ page }) => {
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search 1second");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:Error:searchneedsthreeargs" })
+  ).toBeVisible();
+});
+
+test("fails search without load & bad args", async ({ page }) => {
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search 1 second");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:Error:searchrequiresaload" })
+  ).toBeVisible();
+});
 // search with view and load
+test("valid search with view and load", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file way");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofwaysuccessful!" })
+  ).toBeVisible();
+  //view
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:Successfulview!12345Iwantitthatway" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search 1 want");
+  await page.getByRole("button", { name: "Submitted 2 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:Searching!:)Iwantitthatway" })
+  ).toBeVisible();
+});
 // search with load
+test("valid search with load", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file way");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofwaysuccessful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search 1 want");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:Searching!:)Iwantitthatway" })
+  ).toBeVisible();
+});
 // search bad input
+test("failed bad search with load", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file way");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofwaysuccessful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search bad input");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("table").filter({ hasText: "Output:Searching!" })
+  ).toBeVisible();
+  await expect(
+    page.locator("table").filter({
+      hasText: "Error:searchfailed.Keywordnotfound.",
+    })
+  ).toBeVisible();
+});
 // search too many arguments
+test("failed bad search too many args", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file way");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofwaysuccessful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search bad input long");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("table").filter({
+      hasText: "Output:Error:searchneedsthreeargs",
+    })
+  ).toBeVisible();
+});
 // search not enough arguments
+test("failed bad search not enough args", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file way");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page
+      .locator("table")
+      .filter({ hasText: "Output:load_fileofwaysuccessful!" })
+  ).toBeVisible();
+  // search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search bad");
+  await page.getByRole("button", { name: "Submitted 1 times" }).click();
+  await expect(
+    page.locator("table").filter({
+      hasText: "Output:Error:searchneedsthreeargs",
+    })
+  ).toBeVisible();
+});
+// invalid command
+test("failed invalid command", async ({ page }) => {
+  //load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("badcommand");
+  await page.getByRole("button", { name: "Submitted 0 times" }).click();
+  await expect(
+    page.locator("table").filter({
+      hasText: "Output:Error:badcommand.badcommandisnotarealcommand",
+    })
+  ).toBeVisible();
+});
