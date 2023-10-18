@@ -2,6 +2,7 @@
   "name": "cs32-sprint3-gearup",
   "version": "22.2.0",
   "description": "Brown CSCI0320 Sprint 3 Gearup for Fall 2023",
+  "homepage": "https://ystepane.github.io/mock",
   "license": "UNLICENSED",
   "dependencies": {
     "@types/node": "^16.11.36",
@@ -28,7 +29,9 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
